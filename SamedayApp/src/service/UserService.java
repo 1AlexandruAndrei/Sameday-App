@@ -1,6 +1,6 @@
 
 package service;
-import Delivery.*;
+
 import orderInfo.*;
 
 import java.util.*;
@@ -9,7 +9,6 @@ import exception.InvalidDataException;
 public class UserService {
     private static final List<User> userList = new ArrayList<>();
     private static int nextUserId = 1;
-    protected static Scanner scanner = new Scanner(System.in);
 
     public static List<User> getUserList() {
         return userList;

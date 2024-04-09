@@ -19,23 +19,25 @@ public class Main {
         System.out.println("1. User");
         System.out.println("2. Driver");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
 
         if (choice == 1) {
 
             try {
                 UserService.createUser("Andrei", "admin", "andrei@test.com", "+40777777777", true);
+                //UserService.createUser("Jean", "parola", "jean@test.com", "+40777777770", false);
             } catch (InvalidDataException e) {
                 System.out.println("Invalid user data: " + e.getMessage());
             }
 
-            ProductService.createProduct("T-shirt", 250);
+            ProductService.createProduct("T-shirt", 50);
             ProductService.createProduct("iPhone 15 Pro Max", 1000);
             ProductService.createProduct("Lamborghini Aventador", 100000);
             ProductService.createProduct("Sprite", 7.5);
-            ProductService.createProduct("Jeans", 203);
+            ProductService.createProduct("Jeans", 200);
             ProductService.createProduct("PC", 10000);
-
+            ProductService.createProduct("Dom Perignon", 1250.5);
+            ProductService.createProduct("Cartea 'Felicitari'", 100);
             LockerService.addLocker(10, false); // Non-available locker
             LockerService.addLocker(5, true);   // Available locker
             LockerService.addLocker(9, true);   // Available locker
