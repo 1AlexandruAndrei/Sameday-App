@@ -1,6 +1,10 @@
 import Delivery.Driver;
 import Delivery.Warehouse;
-import orderInfo.*;
+import com.sun.jdi.request.WatchpointRequest;
+import exception.InvalidDataException;
+import orderInfo.Order;
+import orderInfo.Product;
+import service.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,57 +22,57 @@ public class Main {
         scanner.nextLine(); // Consume newline
 
         if (choice == 1) {
-            // User related code
 
-            // There are 2 types of users, premium and normal. The difference is that premium users get a 10% discount of the total order value.
-            // Service.addPremiumUser("Marius", "pass", "marius@user.com", "+40000000000");
-            Service.createUser("Andrei", "admin", "andrei@test.com", "+40777777777", true);
+            try {
+                UserService.createUser("Andrei", "admin", "andrei@test.com", "+40777777777", true);
+            } catch (InvalidDataException e) {
+                System.out.println("Invalid user data: " + e.getMessage());
+            }
 
-            Service.createProduct("T-shirt", 250);
-            Service.createProduct("iPhone 15 Pro Max", 1000);
-            Service.createProduct("Lamborghini Aventador", 100000);
-            Service.createProduct("Sprite", 7.5);
-            Service.createProduct("Jeans", 203);
-            Service.createProduct("PC", 10000);
+            ProductService.createProduct("T-shirt", 250);
+            ProductService.createProduct("iPhone 15 Pro Max", 1000);
+            ProductService.createProduct("Lamborghini Aventador", 100000);
+            ProductService.createProduct("Sprite", 7.5);
+            ProductService.createProduct("Jeans", 203);
+            ProductService.createProduct("PC", 10000);
 
-            Service.addLocker(10, false); // Non-available locker
-            Service.addLocker(5, true);   // Available locker
-            Service.addLocker(9, true);   // Available locker
+            LockerService.addLocker(10, false); // Non-available locker
+            LockerService.addLocker(5, true);   // Available locker
+            LockerService.addLocker(9, true);   // Available locker
 
             Driver driver = new Driver(1, "Sorin");
 
             Warehouse warehouse1 = new Warehouse(1, "Militari Petrom", 10000);
             Warehouse warehouse2 = new Warehouse(2, "Nordului Nowa", 5);
 
-            User user = Service.getUserList().get(0); // first user
-            List<Product> products = Service.getProductList();
+            List<Product> products = ProductService.getProductList();
             List<Product> order1Products = Arrays.asList(products.get(0), products.get(1)); // First two products
             List<Product> order2Products = Arrays.asList(products.get(2), products.get(3)); // Second two products
-            Service.createOrder(user, order1Products, "Str Preciziei nr 24", "10:00 AM", driver);
-            Service.createOrder(user, order2Products, "Soseaua Nordului 52 ", "1:00 PM", driver);
+            OrderService.createOrder(UserService.getUserList().get(0), order1Products, "Str Preciziei nr 24", "10:00 AM", driver);
+            OrderService.createOrder(UserService.getUserList().get(0), order2Products, "Soseaua Nordului 52 ", "1:00 PM", driver);
 
-            Service.provideFeedbackForOrders(scanner);
+            FeedbackService.provideFeedbackForOrders(scanner);
 
-            for (Order order : Service.getOrderList()) {
-                double totalOrderValue = Service.calculateTotalOrderValue(order);
+            for (Order order : OrderService.getOrderList()) {
+                double totalOrderValue = OrderService.calculateTotalOrderValue(order);
                 System.out.println("-----------------------------------------------");
                 System.out.println("Total order value for Order " + order.getOrderId() + ": $" + totalOrderValue);
                 System.out.println("-----------------------------------------------");
             }
 
-            Service.displayUser(user);
-            Service.displayDriver(driver);
-            Service.displayFeedbackForOrder(1);
-            Service.displayFeedbackForOrder(2);
+            UserService.displayUser(UserService.getUserList().get(0));
+            DriverService.displayDriver(driver);
+            FeedbackService.displayFeedbackForOrder(1);
+            FeedbackService.displayFeedbackForOrder(2);
 
-            List<Order> orders = Service.getOrderList();
+            List<Order> orders = OrderService.getOrderList();
             for (int i = 0; i < orders.size(); i++) {
                 Warehouse warehouse = (i % 2 == 0) ? warehouse1 : warehouse2; // Alternating warehouses so they don't get full
                 orders.get(i).setWarehouse(warehouse);
             }
 
-            Service.displayWarehouse(warehouse1);
-            Service.displayWarehouse(warehouse2);
+            WarehouseService.displayWarehouse(warehouse1);
+            WarehouseService.displayWarehouse(warehouse2);
         } else if (choice == 2) {
 
             Driver driver = new Driver(1, "Sorin");
@@ -76,10 +80,10 @@ public class Main {
             Order order1 = new Order(1);
             Order order2 = new Order(2);
 
-            Service.createProduct("T-shirt", 250);
-            Service.createProduct("iPhone 15 Pro Max", 1000);
-            Service.createProduct("Lamborghini Aventador", 100000);
-            Service.createProduct("Sprite", 7.5);
+            ProductService.createProduct("T-shirt", 250);
+            ProductService.createProduct("iPhone 15 Pro Max", 1000);
+            ProductService.createProduct("Lamborghini Aventador", 100000);
+            ProductService.createProduct("Sprite", 7.5);
 
             List<Order> orders = Arrays.asList(order1, order2);
 

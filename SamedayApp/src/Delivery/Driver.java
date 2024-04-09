@@ -16,6 +16,9 @@ public class Driver {
         this.activeOrders = new TreeSet<>(); // Using TreeSet for sorting
     }
 
+    public Driver(int driverId, String name, String licenseNumber, String vehicleType) {
+    }
+
     public int getDriverId() {
         return driverId;
     }
