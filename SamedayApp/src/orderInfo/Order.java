@@ -1,7 +1,9 @@
 package orderInfo;
 
+import Delivery.Driver;
 import Delivery.Warehouse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements Comparable<Order> {
@@ -14,6 +16,8 @@ public class Order implements Comparable<Order> {
     private Feedback feedback;
     private double totalOrderValue;
     private Warehouse warehouse;
+    private Driver driver; // Add Driver field
+
 
     public Warehouse getWarehouse() {
         return warehouse;
@@ -45,6 +49,10 @@ public class Order implements Comparable<Order> {
         this(orderId, user, products, deliveryAddress, deliveryTime, false);
     }
 
+    public Order(int orderId) {
+        this.orderId = orderId;
+        this.products = new ArrayList<>();
+    }
     // Getters and setters
     public int getOrderId() {
         return orderId;
@@ -68,6 +76,14 @@ public class Order implements Comparable<Order> {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
     public String getDeliveryAddress() {

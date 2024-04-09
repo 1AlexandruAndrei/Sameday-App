@@ -12,9 +12,7 @@ public class Warehouse {
     private int capacity;
     private List<Order> orders;
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+
 
     public Warehouse(int warehouseId, String location, int capacity) {
         this.warehouseId = warehouseId;
@@ -51,24 +49,6 @@ public class Warehouse {
         return orders;
     }
 
-    public void addOrder(Order order) {
-        if (order != null && (capacity - order.getProducts().size()) >= 0) {
-            orders.add(order);
-            capacity -= order.getProducts().size();
-            System.out.println("Order added to warehouse: " + order.getOrderId());
-        } else {
-            System.out.println("Order cannot be added to the warehouse. Insufficient capacity.");
-        }
-    }
 
-    public void sortOrdersByCapacity() {
-        orders.sort(Comparator.comparingInt(order -> order.getProducts().size()));
-    }
 
-    public List<Order> retrieveOrders() {
-        List<Order> retrievedOrders = new ArrayList<>(orders);
-        orders.clear();
-        capacity = 0;
-        return retrievedOrders;
-    }
 }

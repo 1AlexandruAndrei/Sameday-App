@@ -21,13 +21,7 @@ public class User {
         this.orders = new ArrayList<>();
 
     }
-
-    public User(String username, String password, String email, String phoneNumber) {
-    }
-
-    public User() {
-
-    }
+    public User() {}
 
     // GETTERS AND SETTERS
     public int getUserId() {

@@ -1,10 +1,7 @@
 import Delivery.*;
 import orderInfo.*;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Service {
     private static final List<User> userList = new ArrayList<>();
@@ -74,7 +71,7 @@ public class Service {
     }
 
     public static void displayUser(User user) {
-        System.out.println("User ID: " + user.getUserId());
+        System.out.println("Your account ID: " + user.getUserId());
         System.out.println("Username: " + user.getUsername());
         System.out.println("Email: " + user.getEmail());
         System.out.println("Phone Number: " + user.getPhoneNumber());
@@ -129,19 +126,20 @@ public class Service {
             orderList.add(newOrder);
             updateOrderTotal(newOrder);
 
-            driver.assignOrder(newOrder);
-
             // - 10 USD discount if the user is premium
             if (retrievedUser instanceof PremiumUser) {
                 newOrder.setTotalOrderValue(newOrder.getTotalOrderValue() - 10);
             }
             System.out.println("Order created successfully.");
 
+            assignDriverToOrder(newOrder, driver); // Assign driver to the order
+
             addOrderToLocker(newOrder);
         } else {
             System.out.println("USER NOT FOUND. TRY AGAIN!.");
         }
     }
+
 
 
     private static Order getOrderById(int orderId) {
@@ -194,15 +192,6 @@ public class Service {
         Locker locker = new Locker(nextLockerId++, "Location", size, available);
         lockerList.add(locker);
         System.out.println("Locker added: " + locker.getLockerId());
-    }
-
-    public static Locker getAvailableLocker(int orderSize) {
-        for (Locker locker : lockerList) {
-            if (locker.isAvailable() && orderSize <= locker.getSize()) {
-                return locker;
-            }
-        }
-        return null;
     }
 
     public static void addOrderToLocker(Order order) {
@@ -291,35 +280,11 @@ public class Service {
         System.out.println("Order assigned to " + driver.getName());
     }
 
-    ///////////////////// WAREHOUSE /////////////////////
-
-    public static void addWarehouse(String location, int capacity) {
-        Warehouse warehouse = new Warehouse(generateWarehouseId(), location, capacity);
-        warehouseList.add(warehouse);
-        System.out.println("Warehouse added: " + warehouse.getWarehouseId());
-    }
-
-    public static void assignOrderToWarehouse(Order order) {
-        for (Warehouse warehouse : warehouseList) {
-            if (order.getProducts().size() <= warehouse.getCapacity()) {
-                warehouse.addOrder(order);
-                return;
-            }
-        }
-        System.out.println("No suitable warehouse available for the order.");
-    }
-
-    private static int generateWarehouseId() {
-        // Logic to generate a unique warehouse ID
-        return warehouseList.size() + 1;
-    }
-
     public static void displayDriver(Driver driver) {
         System.out.println("The delivery driver assigned to your order is " + driver.getName());
         System.out.println("ID of the orders that will be delivered by " + driver.getName() + " are: ");
         for (orderInfo.Order order : driver.getActiveOrders()) {
             System.out.println(order.getOrderId());
-            // Add more order details if needed
         }
         System.out.println();
     }
@@ -332,6 +297,19 @@ public class Service {
         System.out.println("--------------------------");
         System.out.println();
     }
+    public static List<Order> getAssignedOrders(Driver driver) {
+        List<Order> assignedOrders = new ArrayList<>();
+        for (Order order : orderList) {
+            if (order.getDriver() != null && order.getDriver().equals(driver)) {
+                assignedOrders.add(order);
+            }
+        }
+        return assignedOrders;
+    }
+
+
+
+
 
 
 }
