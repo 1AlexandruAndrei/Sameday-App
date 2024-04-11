@@ -1,14 +1,16 @@
 package service;
 
+import orderInfo.*;
+import java.util.*;
 import exception.InvalidDataException;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import orderInfo.PremiumUser;
 public class PremiumUserService {
     private static final List<PremiumUser> premiumUserList = new ArrayList<>();
     private static int nextUserId = 1;
+
+    public static List<PremiumUser> getPremiumUserList() {
+        return premiumUserList;
+    }
 
     public static void addPremiumUser(String username, String password, String email, String phoneNumber) throws InvalidDataException {
         if (username.isEmpty() || password.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
@@ -17,9 +19,5 @@ public class PremiumUserService {
         PremiumUser premiumUser = new PremiumUser(nextUserId++, username, password, email, phoneNumber);
         premiumUserList.add(premiumUser);
         System.out.println("Premium user added successfully");
-    }
-
-    public static List<PremiumUser> getPremiumUserList() {
-        return premiumUserList;
     }
 }

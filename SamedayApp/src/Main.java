@@ -25,8 +25,9 @@ public class Main {
         if (choice == 1) {
 
             try {
-                UserService.createUser("Andrei", "admin", "andrei@test.com", "+40777777777", true);
-                //UserService.createUser("Jean", "parola", "jean@test.com", "+40777777770", false);
+                UserService.addUser("Lucian", "test", "luci@test.com", "+40777777777");
+                //2PremiumUserService.addPremiumUser("Andrei", "admin", "andrei@test.com", "+40777777776");
+
             } catch (InvalidDataException e) {
                 System.out.println("Invalid user data: " + e.getMessage());
             }
@@ -111,10 +112,10 @@ public class Main {
             System.out.println("Driver: " + driver.getName());
             System.out.println("Active Orders:");
             for (Order order : driver.getActiveOrders()) {
-                System.out.println("- Order ID: " + order.getOrderId() + ", Warehouse: " + order.getWarehouse().getLocation());
+                System.out.println("- Order no.: " + order.getOrderId() + " must be pciked up from warehouse: " + order.getWarehouse().getLocation());
             }
 
-            System.out.println("\nWarehouses:");
+            System.out.println("\nWarehouses addresses:");
             System.out.println("- Warehouse 1: " + warehouse1.getLocation());
             System.out.println("- Warehouse 2: " + warehouse2.getLocation());
         } else {
