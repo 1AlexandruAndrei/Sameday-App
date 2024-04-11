@@ -7,6 +7,7 @@ import orderInfo.Product;
 import service.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -48,6 +49,14 @@ public class Main {
             Warehouse warehouse2 = new Warehouse(2, "Nordului Nowa", 5);
 
             List<Product> products = ProductService.getProductList();
+
+            //The list of products can be sorted alphabetically, but it will display  
+            //Collections.sort(products, (product1, product2) -> product1.getName().compareTo(product2.getName()));
+
+            System.out.println("Sorted list of products:");
+            for (Product product : products) {
+                System.out.println(product.getName() + ": $" + product.getPrice());
+            }
             List<Product> order1Products = Arrays.asList(products.get(0), products.get(1)); // First two products
             List<Product> order2Products = Arrays.asList(products.get(2), products.get(3)); // Second two products
             OrderService.createOrder(UserService.getUserList().get(0), order1Products, "Str Preciziei nr 24", "10:00 AM", driver);
