@@ -10,7 +10,6 @@ public class WarehouseService {
     public static void addWarehouse(String location, int capacity) {
         Warehouse warehouse = new Warehouse(nextWarehouseId++, location, capacity);
         warehouseList.add(warehouse);
-        System.out.println("Warehouse added: " + warehouse.getWarehouseId());
     }
 
     public static void displayWarehouse(Warehouse warehouse) {

@@ -3,17 +3,22 @@ import Delivery.Warehouse;
 import com.sun.jdi.request.WatchpointRequest;
 import exception.InvalidDataException;
 import orderInfo.Order;
+import orderInfo.PremiumUser;
 import orderInfo.Product;
 import service.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import javax.xml.crypto.Data;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
+        List<PremiumUser> premiumUsers = new ArrayList<>();
+        Warehouse warehouse1 = null; // Declare warehouse1 outside of if-else blocks
+        Warehouse warehouse2 = null; // Declare warehouse2 outside of if-else blocks
+        warehouse1 = new Warehouse(1, "Militari Petrom", 10000);
+        warehouse2 = new Warehouse(2, "Nordului Nowa", 5);
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Are you a user or a driver?");
@@ -25,33 +30,23 @@ public class Main {
         if (choice == 1) {
 
             try {
-                UserService.addUser("Lucian", "test", "luci@test.com", "+40777777777");
-                //2PremiumUserService.addPremiumUser("Andrei", "admin", "andrei@test.com", "+40777777776");
-
+                UserService.createUser("Andrei", "admin", "andrei@test.com", "+40777777777", true);
+                //UserService.createUser("Jean", "parola", "jean@test.com", "+40777777770", false);
             } catch (InvalidDataException e) {
                 System.out.println("Invalid user data: " + e.getMessage());
             }
 
-            ProductService.createProduct("T-shirt", 50);
-            ProductService.createProduct("iPhone 15 Pro Max", 1000);
-            ProductService.createProduct("Lamborghini Aventador", 100000);
-            ProductService.createProduct("Sprite", 7.5);
-            ProductService.createProduct("Jeans", 200);
-            ProductService.createProduct("PC", 10000);
-            ProductService.createProduct("Dom Perignon", 1250.5);
-            ProductService.createProduct("Cartea 'Felicitari'", 100);
-            LockerService.addLocker(10, false); // Non-available locker
-            LockerService.addLocker(5, true);   // Available locker
-            LockerService.addLocker(9, true);   // Available locker
+            DataStorage.createProducts();
+            DataStorage.addLocker();
+
 
             Driver driver = new Driver(1, "Sorin");
 
-            Warehouse warehouse1 = new Warehouse(1, "Militari Petrom", 10000);
-            Warehouse warehouse2 = new Warehouse(2, "Nordului Nowa", 5);
+
 
             List<Product> products = ProductService.getProductList();
 
-            //The list of products can be sorted alphabetically, but it will display  
+            //The list of products can be sorted alphabetically, but it will display
             //Collections.sort(products, (product1, product2) -> product1.getName().compareTo(product2.getName()));
 
             System.out.println("Sorted list of products:");
@@ -92,32 +87,23 @@ public class Main {
             Order order1 = new Order(1);
             Order order2 = new Order(2);
 
-            ProductService.createProduct("T-shirt", 250);
-            ProductService.createProduct("iPhone 15 Pro Max", 1000);
-            ProductService.createProduct("Lamborghini Aventador", 100000);
-            ProductService.createProduct("Sprite", 7.5);
+            DataStorage.createProducts2();
 
             List<Order> orders = Arrays.asList(order1, order2);
 
             for (Order order : orders) {
                 driver.assignOrder(order);
             }
+            DataStorage.createWarehouses();
 
-            Warehouse warehouse1 = new Warehouse(1, "Militari Petrom", 10000);
-            Warehouse warehouse2 = new Warehouse(2, "Nordului Nowa", 5);
 
-            order1.setWarehouse(warehouse1);
-            order2.setWarehouse(warehouse2);
-
-            System.out.println("Driver: " + driver.getName());
-            System.out.println("Active Orders:");
-            for (Order order : driver.getActiveOrders()) {
-                System.out.println("- Order no.: " + order.getOrderId() + " must be pciked up from warehouse: " + order.getWarehouse().getLocation());
+            if (warehouse1 != null && warehouse2 != null) { // Check if warehouses are initialized
+                order1.setWarehouse(warehouse1);
+                order2.setWarehouse(warehouse2);
+            } else {
+                System.out.println("Warehouses not initialized.");
             }
 
-            System.out.println("\nWarehouses addresses:");
-            System.out.println("- Warehouse 1: " + warehouse1.getLocation());
-            System.out.println("- Warehouse 2: " + warehouse2.getLocation());
         } else {
             System.out.println("Invalid choice.");
         }

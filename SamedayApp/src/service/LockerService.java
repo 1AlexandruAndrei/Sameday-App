@@ -27,7 +27,7 @@ public class LockerService {
         while (!orderAdded) {
             for (Locker locker : lockerList) {
                 if (locker.isAvailable() && locker.getSize() >= order.getProducts().size()) {
-                    System.out.println("Locker available for your order: " + locker.getLockerId());
+                    System.out.println("Locker near you that is available: " + locker.getLockerId() + locker.getLocation());
                     System.out.println("Do you want to use this locker? (1 for yes, 0 for no): ");
                     int choice = scanner.nextInt();
                     scanner.nextLine();

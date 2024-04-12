@@ -1,8 +1,9 @@
 package service;
-
 import orderInfo.*;
-import java.util.*;
 import exception.InvalidDataException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PremiumUserService {
     private static final List<PremiumUser> premiumUserList = new ArrayList<>();
@@ -16,6 +17,7 @@ public class PremiumUserService {
         if (username.isEmpty() || password.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
             throw new InvalidDataException("Username, password, email, or phone number cannot be empty.");
         }
+        // Create a new PremiumUser object using the constructor and add it to the list
         PremiumUser premiumUser = new PremiumUser(nextUserId++, username, password, email, phoneNumber);
         premiumUserList.add(premiumUser);
         System.out.println("Premium user added successfully");
