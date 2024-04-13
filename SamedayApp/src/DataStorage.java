@@ -1,7 +1,5 @@
 import Delivery.Warehouse;
-import service.LockerService;
-import service.ProductService;
-import service.WarehouseService;
+import service.*;
 
 import static service.WarehouseService.displayWarehouse;
 
@@ -41,6 +39,13 @@ public class DataStorage {
         Warehouse warehouse2 = new Warehouse(2, "Nordului Nowa", 5);
         WarehouseService.addWarehouse(warehouse2.getLocation(), warehouse2.getCapacity());
         displayWarehouse(warehouse2);
+    }
+
+    public static void displayAll()
+    {
+        UserService.displayUser(UserService.getUserList().get(0));
+        FeedbackService.displayFeedbackForOrder(1);
+        FeedbackService.displayFeedbackForOrder(2);
     }
 
 

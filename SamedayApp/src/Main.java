@@ -14,8 +14,8 @@ public class Main {
 
     public static void main(String[] args) {
         List<PremiumUser> premiumUsers = new ArrayList<>();
-        Warehouse warehouse1 = null; // Declare warehouse1 outside of if-else blocks
-        Warehouse warehouse2 = null; // Declare warehouse2 outside of if-else blocks
+        Warehouse warehouse1 = null;
+        Warehouse warehouse2 = null;
         warehouse1 = new Warehouse(1, "Militari Petrom", 10000);
         warehouse2 = new Warehouse(2, "Nordului Nowa", 5);
 
@@ -39,22 +39,19 @@ public class Main {
             DataStorage.createProducts();
             DataStorage.addLocker();
 
-
             Driver driver = new Driver(1, "Sorin");
-
-
 
             List<Product> products = ProductService.getProductList();
 
-            //The list of products can be sorted alphabetically, but it will display
+            //The list of products can be sorted alphabetically
             //Collections.sort(products, (product1, product2) -> product1.getName().compareTo(product2.getName()));
+            //System.out.println("Sorted list of products:");
 
-            System.out.println("Sorted list of products:");
             for (Product product : products) {
                 System.out.println(product.getName() + ": $" + product.getPrice());
             }
-            List<Product> order1Products = Arrays.asList(products.get(0), products.get(1)); // First two products
-            List<Product> order2Products = Arrays.asList(products.get(2), products.get(3)); // Second two products
+            List<Product> order1Products = Arrays.asList(products.get(0), products.get(1));
+            List<Product> order2Products = Arrays.asList(products.get(2), products.get(3));
             OrderService.createOrder(UserService.getUserList().get(0), order1Products, "Str Preciziei nr 24", "10:00 AM", driver);
             OrderService.createOrder(UserService.getUserList().get(0), order2Products, "Soseaua Nordului 52 ", "1:00 PM", driver);
 
@@ -67,10 +64,9 @@ public class Main {
                 System.out.println("-----------------------------------------------");
             }
 
-            UserService.displayUser(UserService.getUserList().get(0));
+            DataStorage.displayAll();
             DriverService.displayDriver(driver);
-            FeedbackService.displayFeedbackForOrder(1);
-            FeedbackService.displayFeedbackForOrder(2);
+
 
             List<Order> orders = OrderService.getOrderList();
             for (int i = 0; i < orders.size(); i++) {
@@ -80,7 +76,10 @@ public class Main {
 
             WarehouseService.displayWarehouse(warehouse1);
             WarehouseService.displayWarehouse(warehouse2);
-        } else if (choice == 2) {
+        }
+
+        else if (choice == 2)
+        {
 
             Driver driver = new Driver(1, "Sorin");
 
@@ -97,7 +96,7 @@ public class Main {
             DataStorage.createWarehouses();
 
 
-            if (warehouse1 != null && warehouse2 != null) { // Check if warehouses are initialized
+            if (warehouse1 != null && warehouse2 != null) {
                 order1.setWarehouse(warehouse1);
                 order2.setWarehouse(warehouse2);
             } else {
