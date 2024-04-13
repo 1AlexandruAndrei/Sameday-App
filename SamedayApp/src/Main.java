@@ -7,7 +7,6 @@ import orderInfo.PremiumUser;
 import orderInfo.Product;
 import service.*;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class Main {
@@ -52,8 +51,8 @@ public class Main {
             }
             List<Product> order1Products = Arrays.asList(products.get(0), products.get(1));
             List<Product> order2Products = Arrays.asList(products.get(2), products.get(3));
-            OrderService.createOrder(UserService.getUserList().get(0), order1Products, "Str Preciziei nr 24", "10:00 AM", driver);
-            OrderService.createOrder(UserService.getUserList().get(0), order2Products, "Soseaua Nordului 52 ", "1:00 PM", driver);
+            OrderService.createOrder(UserService.getUserList().get(0), "Str Preciziei nr 24", "10:00 AM", driver);
+            OrderService.createOrder(UserService.getUserList().get(0), "Soseaua Nordului 52 ", "1:00 PM", driver);
 
             FeedbackService.provideFeedbackForOrders(scanner);
 
@@ -66,7 +65,6 @@ public class Main {
 
             DataStorage.displayAll();
             DriverService.displayDriver(driver);
-
 
             List<Order> orders = OrderService.getOrderList();
             for (int i = 0; i < orders.size(); i++) {

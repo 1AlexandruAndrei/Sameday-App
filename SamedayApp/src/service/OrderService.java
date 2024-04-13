@@ -26,7 +26,7 @@ public class OrderService {
         return orderList;
     }
 
-    public static void createOrder(User user, List<Product> products, String deliveryAddress, String deliveryTime, Driver driver) {
+    public static void createOrder(User user, String deliveryAddress, String deliveryTime, Driver driver) {
         List<Product> selectedProducts = new ArrayList<>();
         int productId;
 
@@ -55,7 +55,7 @@ public class OrderService {
         }
 
         if (selectedProducts.isEmpty()) {
-            System.out.println("No products selected. The order was not created.");
+            System.out.println("NO PRODUCTS SELECTED. THE ORDER WAS NOT CREATED.");
             return;
         }
 
@@ -78,6 +78,7 @@ public class OrderService {
             System.out.println("USER NOT FOUND. TRY AGAIN!.");
         }
     }
+
 
 
     protected static Order getOrderById(int orderId) {
