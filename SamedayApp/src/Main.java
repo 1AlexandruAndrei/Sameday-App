@@ -49,8 +49,8 @@ public class Main {
             for (Product product : products) {
                 System.out.println(product.getName() + ": $" + product.getPrice());
             }
-            List<Product> order1Products = Arrays.asList(products.get(0), products.get(1));
-            List<Product> order2Products = Arrays.asList(products.get(2), products.get(3));
+            //List<Product> order1Products = Arrays.asList(products.get(0), products.get(1));
+            //List<Product> order2Products = Arrays.asList(products.get(2), products.get(3));
             OrderService.createOrder(UserService.getUserList().get(0), "Str Preciziei nr 24", "10:00 AM", driver);
             OrderService.createOrder(UserService.getUserList().get(0), "Soseaua Nordului 52 ", "1:00 PM", driver);
 
@@ -81,28 +81,14 @@ public class Main {
 
             Driver driver = new Driver(1, "Sorin");
 
-            Order order1 = new Order(1);
+            //Order order1 = new Order(1);
             Order order2 = new Order(2);
 
-            DataStorage.createProducts2();
-
-            List<Order> orders = Arrays.asList(order1, order2);
-
-            for (Order order : orders) {
-                driver.assignOrder(order);
-            }
             DataStorage.createWarehouses();
 
+            driver.assignOrder(order2);
+            System.out.println("Order that must be delivered: " + order2.getOrderId());
 
-            if (warehouse1 != null && warehouse2 != null) {
-                order1.setWarehouse(warehouse1);
-                order2.setWarehouse(warehouse2);
-            } else {
-                System.out.println("Warehouses not initialized.");
-            }
-
-        } else {
-            System.out.println("Invalid choice.");
         }
 
         scanner.close();
