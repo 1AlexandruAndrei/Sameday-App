@@ -1,26 +1,46 @@
 package service;
 
-import Delivery.*;
-import orderInfo.*;
+import Delivery.Locker;
+import orderInfo.Order;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 
 public class LockerService {
+    private static final LockerService instance = new LockerService();
     private static final List<Locker> lockerList = new ArrayList<>();
     private static int nextLockerId = 1;
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
-    public static List<Locker> getLockerList() {
+    private LockerService() {
+    }
+
+    public static LockerService getInstance() {
+        return instance;
+    }
+
+    public List<Locker> getLockerList() {
         return lockerList;
     }
 
-    public static void addLocker(int size, boolean available) {
-        Locker locker = new Locker(nextLockerId++, "Location", size, available);
+    public void addLocker(int size, boolean available, String location) {
+        Locker locker = new Locker(nextLockerId++, location, size, available);
         lockerList.add(locker);
         System.out.println("Locker added: " + locker.getLockerId());
     }
 
-    public static void addOrderToLocker(Order order) {
+    public Locker getLockerById(int lockerId) {
+        for (Locker locker : lockerList) {
+            if (locker.getLockerId() == lockerId) {
+                return locker;
+            }
+        }
+        return null;
+    }
+
+    public void addOrderToLocker(Order order) {
         System.out.println("Order size: " + order.getProducts().size());
 
         boolean orderAdded = false;
@@ -53,6 +73,59 @@ public class LockerService {
                 }
             }
         }
+    }
+
+    public void displayLockers() {
+        if (lockerList.isEmpty()) {
+            System.out.println("No lockers available.");
+        } else {
+            for (Locker locker : lockerList) {
+                System.out.println("Locker ID: " + locker.getLockerId());
+                System.out.println("Location: " + locker.getLocation());
+                System.out.println("Size: " + locker.getSize());
+                System.out.println("Available: " + locker.isAvailable());
+                System.out.println("-----------------------------------");
+            }
+        }
+    }
+
+    public void deleteLockerById(int lockerId) {
+        Iterator<Locker> iterator = lockerList.iterator();
+        while (iterator.hasNext()) {
+            Locker locker = iterator.next();
+            if (locker.getLockerId() == lockerId) {
+                iterator.remove();
+                System.out.println("Locker with ID " + lockerId + " has been deleted.");
+                return;
+            }
+        }
+        System.out.println("No locker found with ID " + lockerId);
+    }
+
+    public void updateLocker(int lockerId, int newSize, boolean newAvailable, String newLocation) {
+        for (Locker locker : lockerList) {
+            if (locker.getLockerId() == lockerId) {
+                locker.setSize(newSize);
+                locker.setAvailable(newAvailable);
+                locker.setLocation(newLocation);
+                System.out.println("Locker with ID " + lockerId + " has been updated.");
+                return;
+            }
+        }
+        System.out.println("No locker found with ID " + lockerId);
+    }
+
+    public void addLockerFromInput() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter locker location: ");
+        String lockerLocation = scanner.nextLine();
+        System.out.print("Enter locker size: ");
+        int lockerSize = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Is the locker available? (true/false): ");
+        boolean lockerAvailable = scanner.nextBoolean();
+        LockerService.getInstance().addLocker(lockerSize, lockerAvailable, lockerLocation);
+        scanner.close();
     }
 
 }

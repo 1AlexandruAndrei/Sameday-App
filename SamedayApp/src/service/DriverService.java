@@ -7,14 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DriverService {
-    private static final List<Driver> driverList = new ArrayList<>();
+    private static DriverService instance;
+    private final List<Driver> driverList = new ArrayList<>();
 
-    public static void assignDriverToOrder(Order order, Driver driver) {
+    private DriverService() {}
+
+    public static DriverService getInstance() {
+        if (instance == null) {
+            instance = new DriverService();
+        }
+        return instance;
+    }
+
+    public void assignDriverToOrder(Order order, Driver driver) {
         driver.assignOrder(order);
         System.out.println("Order assigned to " + driver.getName());
     }
 
-    public static void displayDriver(Driver driver) {
+    public void displayDriver(Driver driver) {
         System.out.println("The delivery driver assigned to your order is " + driver.getName());
         System.out.println("ID of the orders that will be delivered by " + driver.getName() + " are: ");
         for (Order order : driver.getActiveOrders()) {
@@ -23,7 +33,7 @@ public class DriverService {
         System.out.println();
     }
 
-    public static List<Order> getAssignedOrders(Driver driver) {
+    public List<Order> getAssignedOrders(Driver driver) {
         List<Order> assignedOrders = new ArrayList<>();
         for (Order order : driver.getActiveOrders()) {
             assignedOrders.add(order);

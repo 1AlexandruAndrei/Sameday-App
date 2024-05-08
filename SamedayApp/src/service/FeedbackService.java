@@ -1,18 +1,28 @@
 package service;
 
-import orderInfo.*;
+import orderInfo.Feedback;
+import orderInfo.Order;
 
-import java.util.*;
-
-import static service.OrderService.getOrderById;
-import static service.OrderService.getOrderList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class FeedbackService {
-    private static final List<Feedback> feedbackList = new ArrayList<>();
-    private static int nextFeedbackId = 1;
+    private static FeedbackService instance;
+    private final List<Feedback> feedbackList = new ArrayList<>();
+    private int nextFeedbackId = 1;
 
-    public static void addFeedbackToOrder(int orderId, int stars, String comment) {
-        Order order = getOrderById(orderId);
+    private FeedbackService() {}
+
+    public static FeedbackService getInstance() {
+        if (instance == null) {
+            instance = new FeedbackService();
+        }
+        return instance;
+    }
+
+    public void addFeedbackToOrder(int orderId, int stars, String comment) {
+        Order order = OrderService.getInstance().getOrderById(orderId);
         if (order != null) {
             if (stars >= 1 && stars <= 5) {
                 Feedback feedback = new Feedback(order, stars, comment);
@@ -26,7 +36,7 @@ public class FeedbackService {
         }
     }
 
-    public static void displayFeedbackForOrder(int orderId) {
+    public void displayFeedbackForOrder(int orderId) {
         for (Feedback feedback : feedbackList) {
             if (feedback.getOrder().getOrderId() == orderId) {
                 System.out.println("--------------------------");
@@ -40,8 +50,8 @@ public class FeedbackService {
         System.out.println("No feedback found for Order with ID " + orderId);
     }
 
-    public static void provideFeedbackForOrders(Scanner scanner) {
-        List<Order> orderList = getOrderList();
+    public void provideFeedbackForOrders(Scanner scanner) {
+        List<Order> orderList = OrderService.getInstance().getOrderList();
         for (int i = 0; i < orderList.size(); i++) {
             Order order = orderList.get(i);
             System.out.println("Provide feedback for Order " + (i + 1) + ":");

@@ -1,18 +1,30 @@
 package service;
 
-import Delivery.*;
-import java.util.*;
+import Delivery.Warehouse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WarehouseService {
-    private static final List<Warehouse> warehouseList = new ArrayList<>();
-    private static int nextWarehouseId = 1;
+    private static WarehouseService instance;
+    private final List<Warehouse> warehouseList = new ArrayList<>();
+    private int nextWarehouseId = 1;
 
-    public static void addWarehouse(String location, int capacity) {
+    private WarehouseService() {}
+
+    public static WarehouseService getInstance() {
+        if (instance == null) {
+            instance = new WarehouseService();
+        }
+        return instance;
+    }
+
+    public void addWarehouse(String location, int capacity) {
         Warehouse warehouse = new Warehouse(nextWarehouseId++, location, capacity);
         warehouseList.add(warehouse);
     }
 
-    public static void displayWarehouse(Warehouse warehouse) {
+    public void displayWarehouse(Warehouse warehouse) {
         System.out.println("--------------------------");
         System.out.println("Warehouse ID: " + warehouse.getWarehouseId());
         System.out.println("Location: " + warehouse.getLocation());
@@ -21,7 +33,7 @@ public class WarehouseService {
         System.out.println();
     }
 
-    public static List<Warehouse> getWarehouseList() {
+    public List<Warehouse> getWarehouseList() {
         return warehouseList;
     }
 }

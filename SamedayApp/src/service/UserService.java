@@ -1,14 +1,25 @@
-
 package service;
 
-import orderInfo.*;
-
-import java.util.*;
 import exception.InvalidDataException;
+import orderInfo.PremiumUser;
+import orderInfo.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService {
+    private static UserService instance;
     private static final List<User> userList = new ArrayList<>();
     private static int nextUserId = 1;
+
+    private UserService() {}
+
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
+        }
+        return instance;
+    }
 
     public static List<User> getUserList() {
         return userList;
@@ -38,7 +49,7 @@ public class UserService {
         System.out.println("User added successfully");
     }
 
-    protected static User getUserById(int userId) {
+    protected User getUserById(int userId) {
         for (User user : userList) {
             if (user.getUserId() == userId) {
                 return user;
@@ -47,7 +58,7 @@ public class UserService {
         return null;
     }
 
-    public static void displayUser(User user) {
+    public void displayUser(User user) {
         System.out.println("Your account ID: " + user.getUserId());
         System.out.println("Username: " + user.getUsername());
         System.out.println("Email: " + user.getEmail());
