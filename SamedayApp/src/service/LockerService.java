@@ -157,20 +157,12 @@ public class LockerService {
         }
     }
 
-    public static void displayLockersFromDatabase() {
-        List<Locker> lockerList = getLockerList();
-        System.out.println("Available Lockers:");
-        for (Locker locker : lockerList) {
-            System.out.println(locker.getLockerId() + ". " + locker.getLocation() + " (Size: " + locker.getSize() + ", Available: " + locker.isAvailable() + ")");
-        }
-    }
     public void addOrderToLocker(Order order) {
         List<Locker> lockers = getLockerList();
         for (Locker locker : lockers) {
             if (locker.isAvailable()) {
                 locker.setAvailable(false);
-                //order.setLockerId(locker.getLockerId()); // Update the order with the locker ID
-                order.setHasBeenDelivered(false); // Assuming false means not delivered
+                order.setHasBeenDelivered(false); // it has not been delivered yet
                 System.out.println("Pick up the order from the locker situated at " + locker.getLocation());
                 saveLocker(locker);
                 break;

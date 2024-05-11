@@ -18,12 +18,9 @@ public class DataSetup {
                 "VALUES (name,price); " +
                 "SET id = LAST_INSERT_ID(); " +
                 "END";
-
         String createTableLockersSql = "CREATE TABLE IF NOT EXISTS lockers" +
                 "(lockerId int PRIMARY KEY AUTO_INCREMENT, location varchar(100), size int, available boolean)";
-
         String deleteProcedureLockers = "DROP PROCEDURE IF EXISTS demo.INSERT_LOCKERS;";
-
         String createStoredProcedureLockers = "CREATE PROCEDURE IF NOT EXISTS INSERT_LOCKERS(OUT lockerId int, IN location varchar(100), IN size int, IN available boolean) " +
                 "BEGIN " +
                 "INSERT INTO lockers(location, size, available) " +
@@ -31,6 +28,27 @@ public class DataSetup {
                 "SET lockerId = LAST_INSERT_ID(); " +
                 "END";
 
+        String createTableUsersSql = "CREATE TABLE IF NOT EXISTS users" +
+                "(userId int PRIMARY KEY AUTO_INCREMENT, username varchar(50)," +
+                "password varchar(50), email varchar(100), phoneNumber varchar(15))";
+        String deleteProcedureUsers = "DROP PROCEDURE IF EXISTS demo.INSERT_USERS;";
+        String createStoredProcedureUsers = "CREATE PROCEDURE IF NOT EXISTS INSERT_USERS(OUT userId int, IN username varchar(50), IN password varchar(50), IN email varchar(100), IN phoneNumber varchar(15)) " +
+                "BEGIN " +
+                "INSERT INTO users(username, password, email, phoneNumber) " +
+                "VALUES (username, password, email, phoneNumber); " +
+                "SET userId = LAST_INSERT_ID(); " +
+                "END";
+
+
+        String createTableWarehousesSql = "CREATE TABLE IF NOT EXISTS warehouses" +
+                "(warehouseId int PRIMARY KEY AUTO_INCREMENT, location varchar(100), capacity int)";
+        String deleteProcedureWarehouses = "DROP PROCEDURE IF EXISTS demo.INSERT_WAREHOUSES;";
+        String createStoredProcedureWarehouses = "CREATE PROCEDURE IF NOT EXISTS INSERT_WAREHOUSES(OUT warehouseId int, IN location varchar(100), IN capacity int) " +
+                "BEGIN " +
+                "INSERT INTO warehouses(location, capacity) " +
+                "VALUES (location, capacity); " +
+                "SET warehouseId = LAST_INSERT_ID(); " +
+                "END";
         Connection databaseConnection = DatabaseConfiguration.getConnection();
         Statement stmt = databaseConnection.createStatement();
 
@@ -41,5 +59,13 @@ public class DataSetup {
         stmt.execute(createTableLockersSql);
         stmt.execute(deleteProcedureLockers);
         stmt.execute(createStoredProcedureLockers);
+
+        stmt.execute(createTableUsersSql);
+        stmt.execute(deleteProcedureUsers);
+        stmt.execute(createStoredProcedureUsers);
+
+        stmt.execute(createTableWarehousesSql);
+        stmt.execute(deleteProcedureWarehouses);
+        stmt.execute(createStoredProcedureWarehouses);
     }
 }

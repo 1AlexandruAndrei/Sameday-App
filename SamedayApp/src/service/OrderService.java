@@ -71,21 +71,4 @@ public class OrderService {
         return null;
     }
 
-    public static double calculateTotalOrderValue(Order order) {
-        double total = 0.0;
-        for (Product product : order.getProducts()) {
-            total += product.getPrice();
-        }
-
-        if (order.getUser() instanceof PremiumUser) {
-            total *= 0.9; // 10% discount for premium users
-        }
-
-        return total;
-    }
-
-    public static void updateOrderTotal(Order order) {
-        double totalOrderValue = calculateTotalOrderValue(order);
-        order.setTotalOrderValue(totalOrderValue);
-    }
 }
