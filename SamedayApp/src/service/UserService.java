@@ -58,18 +58,4 @@ public class UserService {
         return null;
     }
 
-    public void displayUser(User user) {
-        System.out.println("Your account ID: " + user.getUserId());
-        System.out.println("Username: " + user.getUsername());
-        System.out.println("Email: " + user.getEmail());
-        System.out.println("Phone Number: " + user.getPhoneNumber());
-
-        if (user instanceof PremiumUser) {
-            System.out.println("Premium User: Yes");
-        } else {
-            System.out.println("Premium User: No");
-        }
-
-        System.out.println();
-    }
 }

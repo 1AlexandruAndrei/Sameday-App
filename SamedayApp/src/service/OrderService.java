@@ -15,7 +15,7 @@ public class OrderService {
     private static OrderService instance;
     private static final List<Order> orderList = new ArrayList<>();
     private static int nextOrderId = 1;
-    private static final Scanner scanner = new Scanner(System.in);
+    protected static final Scanner scanner = new Scanner(System.in);
 
     private OrderService() {}
 
@@ -31,7 +31,6 @@ public class OrderService {
     }
 
     public static void createOrder(User user, List<Product> selectedProducts, String deliveryAddress, String deliveryTime, Driver driver) {
-
         if (selectedProducts.isEmpty()) {
             System.out.println("NO PRODUCTS SELECTED. THE ORDER WAS NOT CREATED.");
             return;
@@ -39,24 +38,29 @@ public class OrderService {
 
         User retrievedUser = UserService.getInstance().getUserById(user.getUserId());
         if (retrievedUser != null) {
+            double totalOrderValue = 0.0;
+
+            for (Product product : selectedProducts)
+                totalOrderValue += product.getPrice();
+
+            if (retrievedUser instanceof PremiumUser)
+            {
+                totalOrderValue = totalOrderValue * 0.9;// 10% discount
+            }
+
             Order newOrder = new Order(nextOrderId++, retrievedUser, selectedProducts, deliveryAddress, deliveryTime);
             orderList.add(newOrder);
-            updateOrderTotal(newOrder);
+            newOrder.setTotalOrderValue(totalOrderValue);
 
-            // - 10 USD discount if the user is premium
-            if (retrievedUser instanceof PremiumUser) {
-                newOrder.setTotalOrderValue(newOrder.getTotalOrderValue() - 10);
-            }
-            System.out.println("Order created successfully.");
-
+            System.out.println("Order created successfully. \nTotal order value: $" + totalOrderValue);
             DriverService.getInstance().assignDriverToOrder(newOrder, driver);
-
             LockerService.getInstance().addOrderToLocker(newOrder);
-        } else {
+        }
+        else
+        {
             System.out.println("USER NOT FOUND. TRY AGAIN!.");
         }
     }
-
 
     protected Order getOrderById(int orderId) {
         for (Order order : orderList) {

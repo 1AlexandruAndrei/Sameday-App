@@ -42,13 +42,12 @@ public class Main {
             List<Product> selectedProducts = new ArrayList<>();
             System.out.println("Enter product ID (0 to stop): ");
             int productIdToOrder;
-            while ((productIdToOrder = scanner.nextInt()) != 0)
-            {
+            while ((productIdToOrder = scanner.nextInt()) != 0) {
                 Product selectedProduct = ProductService.getProductById(productIdToOrder);
                 if (selectedProduct != null) {
                     selectedProducts.add(selectedProduct);
                 } else {
-                    System.out.println("No product found");
+                    System.out.println("No product found.");
                 }
             }
 
@@ -56,22 +55,21 @@ public class Main {
 
             if (!selectedProducts.isEmpty()) {
                 Driver driver = new Driver(1, "Sorin");
-                String deliveryAddress = "Delivery Address";
-                String deliveryTime = "Delivery Time";
+                String deliveryAddress = "Texas";
+                String deliveryTime = "20 May 2024";
                 OrderService.createOrder(user, selectedProducts, deliveryAddress, deliveryTime, driver);
                 System.out.println("Order placed successfully!");
             } else {
-                System.out.println("No products selected for order.");
+                System.out.println("Please try again and add products.");
             }
 
         }
 
 
-        if (choice == 2)
-        {
+        if (choice == 2) {
             Driver driver = new Driver(1, "Sorin");
             Order order2 = new Order(2);
-            DataStorage.createWarehouses();
+            //DataStorage.createWarehouses();
 
             driver.assignOrder(order2);
             System.out.println("Order that must be delivered: " + order2.getOrderId());
@@ -83,23 +81,69 @@ public class Main {
                 DataSetup dataSetup = new DataSetup();
                 dataSetup.createTableAndStoredProcedure();
 
-                System.out.println("1. Create a product");
-                System.out.println("2. Read a product");
-                System.out.println("3. Update a product");
-                System.out.println("4. Delete a product");
-                System.out.print("Enter your choice (1-4): ");
+                System.out.println("1. Create a locker");
+                System.out.println("2. Read a locker");
+                System.out.println("3. Update a locker");
+                System.out.println("4. Delete a locker");
+                System.out.println("5. Create a product");
+                System.out.println("6. Read a product");
+                System.out.println("7. Update a product");
+                System.out.println("8. Delete a product");
+                System.out.print("Enter your choice (1-8): ");
                 int operationChoice = scanner.nextInt();
                 scanner.nextLine();
 
                 switch (operationChoice) {
                     case 1:
+                        System.out.print("Enter locker location: ");
+                        String lockerLocation = scanner.nextLine();
+                        System.out.print("Enter locker size: ");
+                        int lockerSize = scanner.nextInt();
+                        System.out.print("Enter locker availability (true/false): ");
+                        boolean lockerAvailability = scanner.nextBoolean();
+                        DataStorage.addLocker(lockerLocation, lockerSize, lockerAvailability);
+                        break;
+                    case 2:
+                        System.out.print("Enter the ID of the locker: ");
+                        int lockerIdToRead = scanner.nextInt();
+                        scanner.nextLine();
+                        Locker locker = LockerService.getLockerById(lockerIdToRead);
+                        if (locker != null) {
+                            System.out.println("Locker ID: " + locker.getLockerId());
+                            System.out.println("Location: " + locker.getLocation());
+                            System.out.println("Size: " + locker.getSize());
+                            System.out.println("Availability: " + locker.isAvailable());
+                        } else {
+                            System.out.println("No locker found with ID " + lockerIdToRead);
+                        }
+                        break;
+                    case 3:
+                        System.out.print("Enter the ID of the locker: ");
+                        int lockerIdToUpdate = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.print("New location:");
+                        String newLocation = scanner.nextLine();
+                        System.out.print("New size:");
+                        int newSize = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.print("New availability (true/false):");
+                        boolean newAvailability = scanner.nextBoolean();
+                        LockerService.updateLocker(lockerIdToUpdate, newLocation, newSize, newAvailability);
+                        break;
+                    case 4:
+                        System.out.print("Enter the ID of the locker: ");
+                        int lockerIdToDelete = scanner.nextInt();
+                        scanner.nextLine();
+                        LockerService.deleteLockerById(lockerIdToDelete);
+                        break;
+                    case 5:
                         System.out.print("Enter product name: ");
                         String productName = scanner.nextLine();
                         System.out.print("Enter product price: ");
                         double productPrice = scanner.nextDouble();
                         DataStorage.addProduct(productName, productPrice);
                         break;
-                    case 2:
+                    case 6:
                         System.out.print("Enter the ID of the product: ");
                         int productIdToRead = scanner.nextInt();
                         scanner.nextLine();
@@ -112,39 +156,39 @@ public class Main {
                             System.out.println("No product found with ID " + productIdToRead);
                         }
                         break;
-                    case 3:
+                    case 7:
                         System.out.print("Enter the ID of the product: ");
                         int productIdToUpdate = scanner.nextInt();
                         scanner.nextLine();
                         System.out.print("New name:");
                         String newName = scanner.nextLine();
                         System.out.print("New price:");
-                        String newPriceInput = scanner.nextLine();
-                        double newPrice = -1;
-                        if (!newPriceInput.isEmpty()) {
-                            newPrice = Double.parseDouble(newPriceInput);
-                        }
+                        double newPrice = scanner.nextDouble();
+                        scanner.nextLine();
                         ProductService.updateProduct(productIdToUpdate, newName, newPrice);
                         break;
-                    case 4:
+                    case 8:
                         System.out.print("Enter the ID of the product: ");
                         int productIdToDelete = scanner.nextInt();
                         scanner.nextLine();
                         ProductService.deleteProductById(productIdToDelete);
                         break;
                     default:
-                        System.out.println("Invalid choice. Please enter a number from 1 to 4.");
+                        System.out.println("Invalid choice. Please enter a number from 1 to 8.");
                         break;
                 }
-                System.out.println("Available Products: ");
-                ProductService.displayProductsFromDatabase();
+
+                if (operationChoice <= 4) {
+                    LockerService.displayLockersFromDatabase();
+                } else {
+                    System.out.println("Available Products: ");
+                    ProductService.displayProductsFromDatabase();
+                }
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
-        scanner.close();
     }
 
 }
