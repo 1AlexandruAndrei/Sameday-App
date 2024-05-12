@@ -24,11 +24,5 @@ public class DriverService {
         System.out.println("Order assigned to " + driver.getName());
     }
 
-    public List<Order> getAssignedOrders(Driver driver) {
-        List<Order> assignedOrders = new ArrayList<>();
-        for (Order order : driver.getActiveOrders()) {
-            assignedOrders.add(order);
-        }
-        return assignedOrders;
-    }
+
 }

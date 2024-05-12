@@ -4,11 +4,9 @@ import Delivery.Locker;
 import orderInfo.Product;
 import orderInfo.User;
 import service.*;
+import tracker.CRUDtracker;
 
-
-import javax.xml.crypto.Data;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -105,8 +103,7 @@ public class DataStorage {
 
     //////////////////////////////////////
 
-    public static void CRUD_locker(Scanner scanner)
-    {
+    public static void CRUD_locker(Scanner scanner) {
         System.out.println("1. Create a locker");
         System.out.println("2. Read a locker");
         System.out.println("3. Update a locker");
@@ -124,6 +121,7 @@ public class DataStorage {
                 System.out.print("Enter locker availability (true/false): ");
                 boolean lockerAvailability = scanner.nextBoolean();
                 DataStorage.addLocker(lockerLocation, lockerSize, lockerAvailability);
+                CRUDtracker.recordOperation("Create Locker");
                 break;
             case 2:
                 System.out.print("Enter the ID of the locker: ");
@@ -138,6 +136,7 @@ public class DataStorage {
                 } else {
                     System.out.println("No locker found with ID " + lockerIdToRead);
                 }
+                CRUDtracker.recordOperation("Read Locker");
                 break;
             case 3:
                 System.out.print("Enter the ID of the locker: ");
@@ -151,12 +150,14 @@ public class DataStorage {
                 System.out.print("New availability (true/false):");
                 boolean newAvailability = scanner.nextBoolean();
                 LockerService.updateLocker(lockerIdToUpdate, newLocation, newSize, newAvailability);
+                CRUDtracker.recordOperation("Update Locker");
                 break;
             case 4:
                 System.out.print("Enter the ID of the locker: ");
                 int lockerIdToDelete = scanner.nextInt();
                 scanner.nextLine();
                 LockerService.deleteLockerById(lockerIdToDelete);
+                CRUDtracker.recordOperation("Delete Locker");
                 break;
             default:
                 System.out.println("Invalid choice. Please enter a number from 1 to 4.");
@@ -164,7 +165,6 @@ public class DataStorage {
         }
         DataStorage.displayLockers();
     }
-
 
 
 
@@ -184,6 +184,7 @@ public class DataStorage {
                 System.out.print("Enter product price: ");
                 double productPrice = scanner.nextDouble();
                 DataStorage.addProduct(productName, productPrice);
+                CRUDtracker.recordOperation("Create Product");
                 break;
             case 6:
                 System.out.print("Enter the ID of the product: ");
@@ -197,6 +198,7 @@ public class DataStorage {
                 } else {
                     System.out.println("No product found with ID " + productIdToRead);
                 }
+                CRUDtracker.recordOperation("Read Product");
                 break;
             case 7:
                 System.out.print("Enter the ID of the product: ");
@@ -208,12 +210,14 @@ public class DataStorage {
                 double newPrice = scanner.nextDouble();
                 scanner.nextLine();
                 ProductService.updateProduct(productIdToUpdate, newName, newPrice);
+                CRUDtracker.recordOperation("Update Product");
                 break;
             case 8:
                 System.out.print("Enter the ID of the product: ");
                 int productIdToDelete = scanner.nextInt();
                 scanner.nextLine();
                 ProductService.deleteProductById(productIdToDelete);
+                CRUDtracker.recordOperation("Delete Product");
                 break;
             default:
                 System.out.println("Invalid choice. Please enter a number from 5 to 8.");
@@ -243,6 +247,7 @@ public class DataStorage {
                 System.out.print("Enter phone number: ");
                 String phoneNumber = scanner.nextLine();
                 UserService.getInstance().createUser(username, password, email, phoneNumber);
+                CRUDtracker.recordOperation("Create User");
                 break;
             case 10:
                 System.out.print("Enter the ID of the user: ");
@@ -257,6 +262,7 @@ public class DataStorage {
                 } else {
                     System.out.println("No user found with ID " + userIdToRead);
                 }
+                CRUDtracker.recordOperation("Read User");
                 break;
             case 11:
                 System.out.print("Enter the ID of the user: ");
@@ -271,12 +277,14 @@ public class DataStorage {
                 System.out.print("Enter new phone number: ");
                 String newPhoneNumber = scanner.nextLine();
                 UserService.getInstance().updateUser(userIdToUpdate, newUsername, newPassword, newEmail, newPhoneNumber);
+                CRUDtracker.recordOperation("Update User");
                 break;
             case 12:
                 System.out.print("Enter the ID of the user: ");
                 int userIdToDelete = scanner.nextInt();
                 scanner.nextLine();
                 UserService.getInstance().deleteUserById(userIdToDelete);
+                CRUDtracker.recordOperation("Delete User");
                 break;
             default:
                 System.out.println("Invalid choice. Please enter a number from 9 to 12.");
@@ -303,6 +311,7 @@ public class DataStorage {
                 System.out.print("Enter warehouse availability (true/false): ");
                 boolean warehouseAvailability = scanner.nextBoolean();
                 WarehouseService.getInstance().createWarehouse(warehouseLocation, warehouseCapacity);
+                CRUDtracker.recordOperation("Create Warehouse");
                 break;
             case 14:
                 System.out.print("Enter the ID of the warehouse: ");
@@ -316,6 +325,7 @@ public class DataStorage {
                 } else {
                     System.out.println("No warehouse found with ID " + warehouseIdToRead);
                 }
+                CRUDtracker.recordOperation("Read Warehouse");
                 break;
             case 15:
                 System.out.print("Enter the ID of the warehouse: ");
@@ -329,12 +339,14 @@ public class DataStorage {
                 System.out.print("New availability (true/false):");
                 boolean newAvailability = scanner.nextBoolean();
                 WarehouseService.updateWarehouse(warehouseIdToUpdate, newLocation, newCapacity);
+                CRUDtracker.recordOperation("Update Warehouse");
                 break;
             case 16:
                 System.out.print("Enter the ID of the warehouse: ");
                 int warehouseIdToDelete = scanner.nextInt();
                 scanner.nextLine();
                 WarehouseService.deleteWarehouseById(warehouseIdToDelete);
+                CRUDtracker.recordOperation("Delete Warehouse");
                 break;
             default:
                 System.out.println("Invalid choice. Please enter a number from 13 to 16.");

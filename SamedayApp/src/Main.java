@@ -68,13 +68,37 @@ public class Main {
 
 
         if (choice == 2) {
-            Driver driver = new Driver(1, "Sorin");
-            Order order2 = new Order(2);
-            //DataStorage.createWarehouses();
+            Warehouse pickUpWarehouse = WarehouseService.getWarehouseById(1);
+            if (pickUpWarehouse != null) {
+                System.out.println("You must pick up an order from the warehouse situated at: " + pickUpWarehouse.getLocation());
+            } else {
+                System.out.println("Warehouse not found");
+                return;
+            }
 
+            Warehouse deliveryWarehouse = WarehouseService.getWarehouseById(2);
+            Warehouse packageWarehouse = WarehouseService.getWarehouseById(3);
+
+            if (deliveryWarehouse != null) {
+                System.out.println("You must pick up an order from the warehouse situated at: "+ deliveryWarehouse.getLocation());
+            } else {
+                System.out.println("Warehouse not found");
+                return;
+            }
+
+            if (packageWarehouse != null) {
+                System.out.println("Package warehouse location: " + packageWarehouse.getLocation());
+            } else {
+                System.out.println("Warehouse not found");
+                return;
+            }
+            Order order2 = new Order(2);
+            Driver driver = new Driver(1, "Sorin");
             driver.assignOrder(order2);
-            System.out.println("Order that must be delivered: " + order2.getOrderId());
+
+            System.out.println("Order " + order2.getOrderId() + " must be delivered by " + driver.getName());
         }
+
 
         if (choice == 3) {
             try {
