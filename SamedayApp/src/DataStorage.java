@@ -1,12 +1,14 @@
 import Delivery.Warehouse;
 import config.DatabaseConfiguration;
 import Delivery.Locker;
+import orderInfo.Order;
 import orderInfo.Product;
 import orderInfo.User;
 import service.*;
 import tracker.CRUDtracker;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -165,8 +167,6 @@ public class DataStorage {
         }
         DataStorage.displayLockers();
     }
-
-
 
     public static void CRUD_product(Scanner scanner) throws SQLException {
         System.out.println("5. Create a product");
@@ -354,5 +354,142 @@ public class DataStorage {
         }
         DataStorage.displayWarehouses();
     }
+
+    public static void CRUD_order(Scanner scanner) {
+        System.out.println("1. Create an order");
+        System.out.println("2. Read an order");
+        System.out.println("3. Update an order");
+        System.out.println("4. Delete an order");
+        System.out.print("Enter your choice (1-4): ");
+        int operationChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (operationChoice) {
+            case 1:
+                createOrder(scanner);
+                break;
+            case 2:
+                readOrder(scanner);
+                break;
+            case 3:
+                updateOrder(scanner);
+                break;
+            case 4:
+                deleteOrder(scanner);
+                break;
+            default:
+                System.out.println("Invalid choice. Please enter a number from 1 to 4.");
+                break;
+        }
+    }
+
+    public static void createOrder(Scanner scanner) {
+        System.out.print("Enter user ID: ");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+        User user = UserService.getInstance().getUserById(userId);
+
+        System.out.print("Enter delivery address: ");
+        String deliveryAddress = scanner.nextLine();
+
+        System.out.print("Enter delivery time: ");
+        String deliveryTime = scanner.nextLine();
+
+        List<Product> selectedProducts = new ArrayList<>();
+        System.out.print("Enter number of products: ");
+        int numOfProducts = scanner.nextInt();
+        scanner.nextLine();
+
+        displayProducts();
+        for (int i = 0; i < numOfProducts; i++) {
+            System.out.print("Enter product ID: ");
+            int productId = scanner.nextInt();
+            scanner.nextLine();
+            Product product = ProductService.getInstance().getProductById(productId);
+            if (product != null) {
+                selectedProducts.add(product);
+            } else {
+                System.out.println("Product with ID " + productId + " not found.");
+            }
+        }
+
+        System.out.print("Enter feedback ID (1-5): ");
+        int feedbackId = scanner.nextInt();
+        scanner.nextLine();
+
+        OrderService.getInstance().createOrderInDatabase(user, selectedProducts, deliveryAddress, deliveryTime, feedbackId);
+    }
+    private static void readOrder(Scanner scanner) {
+        System.out.print("Enter order ID: ");
+        int orderId = scanner.nextInt();
+        scanner.nextLine();
+
+        Order order = OrderService.getOrderByIdFromDatabase(orderId);
+        if (order != null) {
+            System.out.println("Order ID: " + order.getOrderId());
+            System.out.println("User ID: " + order.getUser().getUserId());
+            System.out.println("Delivery Address: " + order.getDeliveryAddress());
+            System.out.println("Delivery Time: " + order.getDeliveryTime());
+            System.out.println("Total Order Value: $" + order.getTotalOrderValue());
+            System.out.println("Products in the Order: ");
+            for (Product product : order.getProducts()) {
+                System.out.println("- Product ID: " + product.getProductId() + ", Name: " + product.getName() + ", Price: $" + product.getPrice());
+            }
+        } else {
+            System.out.println("No order found with ID " + orderId);
+        }
+    }
+
+    private static void updateOrder(Scanner scanner) {
+        System.out.print("Enter order ID: ");
+        int orderId = scanner.nextInt();
+        scanner.nextLine();
+
+        Order existingOrder = OrderService.getOrderByIdFromDatabase(orderId);
+        if (existingOrder == null) {
+            System.out.println("No order found with ID " + orderId);
+            return;
+        }
+
+        System.out.print("Enter new delivery address: ");
+        String newDeliveryAddress = scanner.nextLine();
+
+        System.out.print("Enter new delivery time: ");
+        String newDeliveryTime = scanner.nextLine();
+
+        List<Product> newProducts = new ArrayList<>();
+        System.out.print("Enter number of new products: ");
+        int numOfNewProducts = scanner.nextInt();
+        scanner.nextLine();
+
+        for (int i = 0; i < numOfNewProducts; i++) {
+            System.out.print("Enter new product ID: ");
+            int newProductId = scanner.nextInt();
+            scanner.nextLine();
+            Product newProduct = ProductService.getInstance().getProductById(newProductId); // Assuming ProductService exists
+            if (newProduct != null) {
+                newProducts.add(newProduct);
+            } else {
+                System.out.println("Product with ID " + newProductId + " not found.");
+            }
+        }
+
+        existingOrder.setDeliveryAddress(newDeliveryAddress);
+        existingOrder.setDeliveryTime(newDeliveryTime);
+        existingOrder.setProducts(newProducts);
+        existingOrder.setTotalOrderValue(newProducts.stream().mapToDouble(Product::getPrice).sum());
+
+        OrderService.updateOrder(existingOrder);
+    }
+
+    private static void deleteOrder(Scanner scanner) {
+        System.out.print("Enter order ID to delete: ");
+        int orderId = scanner.nextInt();
+        scanner.nextLine();
+
+        OrderService.deleteOrderById(orderId);
+    }
+
+
 
 }

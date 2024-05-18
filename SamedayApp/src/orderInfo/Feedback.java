@@ -1,6 +1,7 @@
 package orderInfo;
 
 public class Feedback {
+    private int FeedbackId;
     private Order order;
     private int stars;
     private String comment;
@@ -15,6 +16,21 @@ public class Feedback {
     // Getters and Setters
     public Order getOrder() {
         return order;
+    }
+
+    public int getFeedbackId() {
+        return FeedbackId;
+    }
+
+    public void setFeedbackId(int feedbackId) {
+        FeedbackId = feedbackId;
+    }
+
+    public Feedback(int feedbackId, Order order, int stars, String comment) {
+        FeedbackId = feedbackId;
+        this.order = order;
+        this.stars = stars;
+        this.comment = comment;
     }
 
     public void setOrder(Order order) {

@@ -159,11 +159,4 @@ public class ProductService {
         }
     }
 
-    public static void displayProductsFromDatabase() {
-        List<Product> productList = getProductList();
-        System.out.println("Available Products:");
-        for (Product product : productList) {
-            System.out.println(product.getProductId() + ". " + product.getName() + " ($" + product.getPrice() + ")");
-        }
-    }
 }

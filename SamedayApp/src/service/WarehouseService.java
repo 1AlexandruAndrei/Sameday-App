@@ -151,11 +151,5 @@ public class WarehouseService {
         }
     }
 
-    public static void displayWarehousesFromDatabase() {
-        List<Warehouse> warehouseList = getWarehouseList();
-        System.out.println("Available Warehouses:");
-        for (Warehouse warehouse : warehouseList) {
-            System.out.println(warehouse.getWarehouseId() + ". " + warehouse.getLocation() + " (Capacity: " + warehouse.getCapacity() + ")");
-        }
-    }
+
 }

@@ -47,24 +47,7 @@ public class LockerService {
         return lockerList;
     }
 
-    public void createLocker(String location, int size, boolean available) {
-        Connection connection = null;
-        PreparedStatement statement = null;
 
-        try {
-            connection = DatabaseConfiguration.getConnection();
-            String sql = "INSERT INTO lockers (location, size, available) VALUES (?, ?, ?)";
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, location);
-            statement.setInt(2, size);
-            statement.setBoolean(3, available);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeResources(connection, statement, null);
-        }
-    }
 
     public static void deleteLockerById(int lockerId) {
         Connection connection = null;

@@ -1,15 +1,9 @@
-
 import Delivery.*;
 import config.DataSetup;
 import config.DatabaseConfiguration;
-import exception.InvalidDataException;
 import orderInfo.Order;
-import orderInfo.Product;
-import orderInfo.User;
 import service.*;
-
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -20,85 +14,37 @@ public class Main {
 
         System.out.println("1. Create an order");
         System.out.println("2. Driver Info");
-        System.out.println("3. ADMIN CRUD OPERATIONS ONLY");
+        System.out.println("3. ADMIN CRUD OPERATIONS");
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        if (choice == 1) {
-            try {
-                DatabaseConfiguration.getConnection();
-                DataSetup dataSetup = new DataSetup();
-                dataSetup.createTableAndStoredProcedure();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            System.out.print("Enter user ID: ");
-            int userId = scanner.nextInt();
-            scanner.nextLine();
-            User user = UserService.getUserById(userId);
-
-            if (user != null) {
-                ProductService.displayProductsFromDatabase();
-                List<Product> selectedProducts = new ArrayList<>();
-                System.out.println("Enter product ID (0 to stop): ");
-                int productIdToOrder;
-                while ((productIdToOrder = scanner.nextInt()) != 0) {
-                    Product selectedProduct = ProductService.getProductById(productIdToOrder);
-                    if (selectedProduct != null) {
-                        selectedProducts.add(selectedProduct);
-                    } else {
-                        System.out.println("No product found.");
-                    }
-                }
-
-                if (!selectedProducts.isEmpty()) {
-                    Driver driver = new Driver(1, "Sorin");
-                    String deliveryAddress = "Texas";
-                    String deliveryTime = "20 May 2024";
-                    OrderService.createOrder(user, selectedProducts, deliveryAddress, deliveryTime, driver);
-                    System.out.println("Order placed successfully!");
-                } else {
-                    System.out.println("Please try again and add products.");
-                }
-            } else {
-                System.out.println("User not found.");
-            }
+        if (choice == 1)
+        {
+            DataStorage.CRUD_order(scanner);
         }
-
 
         if (choice == 2) {
-            Warehouse pickUpWarehouse = WarehouseService.getWarehouseById(1);
-            if (pickUpWarehouse != null) {
-                System.out.println("You must pick up an order from the warehouse situated at: " + pickUpWarehouse.getLocation());
-            } else {
-                System.out.println("Warehouse not found");
-                return;
-            }
-
-            Warehouse deliveryWarehouse = WarehouseService.getWarehouseById(2);
-            Warehouse packageWarehouse = WarehouseService.getWarehouseById(3);
-
-            if (deliveryWarehouse != null) {
-                System.out.println("You must pick up an order from the warehouse situated at: "+ deliveryWarehouse.getLocation());
-            } else {
-                System.out.println("Warehouse not found");
-                return;
-            }
-
-            if (packageWarehouse != null) {
-                System.out.println("Package warehouse location: " + packageWarehouse.getLocation());
-            } else {
-                System.out.println("Warehouse not found");
-                return;
-            }
-            Order order2 = new Order(2);
             Driver driver = new Driver(1, "Sorin");
-            driver.assignOrder(order2);
+            System.out.println("Hello, " + driver.getName());
 
-            System.out.println("Order " + order2.getOrderId() + " must be delivered by " + driver.getName());
+            Warehouse packageWarehouse = WarehouseService.getWarehouseById(3);
+            System.out.println("Drop the package at the warehouse situated at " + packageWarehouse.getLocation());
+
+            System.out.print("\nEnter the order ID you want to deliver: ");
+            int orderId = scanner.nextInt();
+            scanner.nextLine();
+
+            Order order = OrderService.getInstance().getOrderByIdFromDatabase(orderId);
+
+            if (order != null) {
+                driver.assignOrder(order);
+                System.out.println("An order was assigned to you!");
+                System.out.println("Order " + order.getOrderId() + " must be delivered to " + order.getDeliveryAddress());
+                System.out.println("Order must be delivered by the date: " + order.getDeliveryTime());
+            } else {
+                System.out.println("Order not found");
+            }
         }
-
 
         if (choice == 3) {
             try {
@@ -128,13 +74,12 @@ public class Main {
                         DataStorage.CRUD_warehouse(scanner);
                         break;
                     default:
-                        System.out.println("Invalid choice. Please enter a number from 1 to 4.");
+                        System.out.println("Invalid choice. Please enter a number from 1 to 5.");
                         break;
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
     }
 }

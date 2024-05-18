@@ -35,7 +35,6 @@ public class UserService {
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
                 String phoneNumber = resultSet.getString("phoneNumber");
-                // Assuming you have a constructor in your User class that accepts these parameters
                 userList.add(new User(userId, username, password, email, phoneNumber));
             }
         } catch (SQLException e) {
@@ -161,12 +160,4 @@ public class UserService {
         }
     }
 
-    public static void displayUsersFromDatabase() {
-        List<User> userList = getUserList();
-        System.out.println("User List:");
-        for (User user : userList) {
-            System.out.println("User ID: " + user.getUserId() + ", Username: " + user.getUsername() +
-                    ", Email: " + user.getEmail() + ", Phone Number: " + user.getPhoneNumber());
-        }
-    }
 }

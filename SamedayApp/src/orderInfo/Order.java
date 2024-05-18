@@ -16,7 +16,6 @@ public class Order implements Comparable<Order> {
     private Feedback feedback;
     private double totalOrderValue;
     private Warehouse warehouse;
-    private Driver driver;
 
 
     public Warehouse getWarehouse() {
@@ -49,6 +48,19 @@ public class Order implements Comparable<Order> {
         this(orderId, user, products, deliveryAddress, deliveryTime, false);
     }
 
+    public Order(int orderId, User user, List<Product> products, String deliveryAddress, String deliveryTime, boolean hasBeenDelivered, Feedback feedback, double totalOrderValue, Warehouse warehouse) {
+        this.orderId = orderId;
+        this.user = user;
+        this.products = products;
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryTime = deliveryTime;
+        this.hasBeenDelivered = hasBeenDelivered;
+        this.feedback = feedback;
+        this.totalOrderValue = totalOrderValue;
+        this.warehouse = warehouse;
+        //this.driver = driver;
+    }
+
     public Order(int orderId) {
         this.orderId = orderId;
         this.products = new ArrayList<>();
@@ -78,13 +90,8 @@ public class Order implements Comparable<Order> {
         this.products = products;
     }
 
-    public Driver getDriver() {
-        return driver;
-    }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
+
 
     public String getDeliveryAddress() {
         return deliveryAddress;
