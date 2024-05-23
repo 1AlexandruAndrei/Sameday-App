@@ -25,7 +25,7 @@ public class WarehouseService {
 
         try {
             connection = DatabaseConfiguration.getConnection();
-            String sql = "SELECT * FROM warehouses";
+            String sql = "SELECT * FROM warehouses order by capacity";
             statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();
 

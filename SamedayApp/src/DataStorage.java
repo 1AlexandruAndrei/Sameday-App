@@ -308,8 +308,6 @@ public class DataStorage {
                 String warehouseLocation = scanner.nextLine();
                 System.out.print("Enter warehouse capacity: ");
                 int warehouseCapacity = scanner.nextInt();
-                System.out.print("Enter warehouse availability (true/false): ");
-                boolean warehouseAvailability = scanner.nextBoolean();
                 WarehouseService.getInstance().createWarehouse(warehouseLocation, warehouseCapacity);
                 CRUDtracker.recordOperation("Create Warehouse");
                 break;
